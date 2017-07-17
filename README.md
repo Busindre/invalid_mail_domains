@@ -1,6 +1,6 @@
 # Script invalid_mail_domains.sh (PostFix Logs)
 Script to find invalid email addresses in the postfix logs (maillog). The script extracts the domains with some denied delivery.
-Dig is used to query the domain MXsol record. If the MX record does not exist, the port 25 is scanned with nmap. 
+Dig is used to query the domain MX records. If the MX record does not exist, the port 25 is scanned with nmap. 
 
 If the MX record is not found and the server does not have port 25 open, any email address belonging to the domain is 100% invalid.
 
