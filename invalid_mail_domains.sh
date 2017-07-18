@@ -11,7 +11,7 @@
 
 [ -t 0 ] && { echo "Input expected from stdin."; exit 1; }
 dns=("8.8.4.4" "8.8.8.8" "208.67.222.222" "208.67.220.220" "8.26.56.26" "8.20.247.20") # DNS Servers to Randomize DNS Requests.
-extract=$(grep "status=deferred" | grep -o "[[:space:]]to=[^[:space:]]*[[:space:]]" | sed -e "s/^[[:space:]]*to=<//" -e "s/>,[[:space:]]*$//" -e "s/^[^@]*@//"| sort|uniq)
+extract=$(grep "status=deferred"|sed -e "s/^.*[[:space:]]\+to=<[^[:space:]]\+@\([^[:space:]>]\+\).*$/\1/"|sort|uniq) # Extract domains.
 for fqdn_domain in $extract; do
         (dig @${dns[$RANDOM % ${#dns[@]} ]} +noall +answer $fqdn_domain MX|grep MX &>/dev/null) || (nmap -Pn -p 25 $fqdn_domain 2>/dev/null | grep "tcp open" &>/dev/null || false) # If MX records are not found, port 25 of the domain is scanned.
         if [ $? -eq 1 ]; then
